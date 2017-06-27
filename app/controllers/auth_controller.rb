@@ -24,7 +24,7 @@ class AuthController < ApplicationController
     # refresh_token = body["refresh_token"]
 
     User.create(
-        auth_code: auth_code, access_token: access_token, refresh_token: refresh_token
+        auth_code: auth_code, access_token: access_token#,  refresh_token: refresh_token
     )
     notice = "Account Authorized Succesfully"
     render json: { notice: notice }

@@ -7,7 +7,7 @@ class QueryService
   end
 
   def products
-
+    query('productos')
   end
 
   def query(resource)
@@ -16,7 +16,9 @@ class QueryService
        access_token: @user.access_token,
     }
     path = "/api/v1/#{resource}"
-    response = conn.post path, params
+    response = conn.get path, params
     JSON.parse(response.body)
+  rescue JSON::ParserError
+    response.body
   end
 end
