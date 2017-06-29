@@ -13,7 +13,7 @@ class QueryService
   def query(resource)
     conn = Faraday.new(API_HOST)
     params = {
-       access_token: @user.access_token,
+       access_token: @user.try(:access_token),
     }
     path = "/api/v1/#{resource}"
     response = conn.get path, params

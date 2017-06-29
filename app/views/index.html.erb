@@ -1,0 +1,8 @@
+<h1>App Innmobiliaria</h1>
+  <% if current_user %>
+    <p>Loggeado!</p><p>access_token: <%= current_user.access_token %></p>
+    <p><%= link_to 'Cerrar Sesión', logout_path %></p>
+  <% else %>
+    <p><%= link_to 'Iniciar Sesión con BCI', request_auth_path %></p>
+  <% end %>
+    <p><%= link_to 'Productos', products_path, target: '_blank' %></p>

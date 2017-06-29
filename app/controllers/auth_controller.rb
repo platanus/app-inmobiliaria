@@ -3,7 +3,7 @@ class AuthController < ApplicationController
   CLIENT_ID = ENV['APP_CLIENT_ID']
   CLIENT_SECRET = ENV['APP_CLIENT_SECRET']
   REDIRECT_URI = Rails.application.routes.url_helpers.process_auth_url
-  API_SCOPE = 'scopeUno'
+  API_SCOPE = 'public'
 
   def request_auth
     params = {
@@ -23,9 +23,10 @@ class AuthController < ApplicationController
     access_token = body["access_token"]
     # refresh_token = body["refresh_token"]
 
-    User.create(
+    user = User.create(
         auth_code: auth_code, access_token: access_token#,  refresh_token: refresh_token
     )
+    session[:user_id] = user.id
     notice = "Account Authorized Succesfully"
     render json: { notice: notice }
   end
