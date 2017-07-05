@@ -3,7 +3,7 @@ class AuthController < ApplicationController
   CLIENT_ID = ENV['APP_CLIENT_ID']
   CLIENT_SECRET = ENV['APP_CLIENT_SECRET']
   REDIRECT_URI = Rails.application.routes.url_helpers.process_auth_url
-  API_SCOPE = 'public'
+  API_SCOPE = 'hipotecario'
 
   def request_auth
     params = {
@@ -12,7 +12,7 @@ class AuthController < ApplicationController
         response_type: 'code',
         scope: API_SCOPE
     }
-    oauth_url = "#{PROVIDER_HOST}/oauth/authorize?#{params.to_param}"
+    oauth_url = "#{PROVIDER_HOST}/portal-api-developers-desarrollo/sandbox/sandbox-api-oauth2/oauth2/authorize?#{params.to_param}"
     redirect_to oauth_url
   end
 
@@ -21,10 +21,10 @@ class AuthController < ApplicationController
     auth_code = params[:code]
     body = exchange_code_for_tokens(auth_code)
     access_token = body["access_token"]
-    # refresh_token = body["refresh_token"]
+    refresh_token = body["refresh_token"]
 
     user = User.create(
-        auth_code: auth_code, access_token: access_token#,  refresh_token: refresh_token
+        auth_code: auth_code, access_token: access_token,  refresh_token: refresh_token
     )
     session[:user_id] = user.id
     notice = "Account Authorized Succesfully"
@@ -54,11 +54,12 @@ class AuthController < ApplicationController
         grant_type: "authorization_code",
         code: auth_code,
         client_id: ENV.fetch('APP_CLIENT_ID'),
-        client_secret: ENV.fetch('APP_CLIENT_SECRET'),
-        redirect_uri: REDIRECT_URI,
-        response_type: "code"
+        # client_secret: ENV.fetch('APP_CLIENT_SECRET'),
+        # redirect_uri: REDIRECT_URI,
+        # response_type: "code",
+        scope: API_SCOPE
     }
-    oauth_url = "/oauth/token"
+    oauth_url = "/portal-api-developers-desarrollo/sandbox/sandbox-api-oauth2/oauth2/token"
     response = conn.post oauth_url, params
     JSON.parse(response.body)
   end
